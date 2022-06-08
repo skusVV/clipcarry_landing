@@ -1,0 +1,98 @@
+@import "../../styles/variables.scss";
+
+.benefits {
+  padding: 100px 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: $app_font;
+
+  &__header {
+    max-width: 645px;
+    text-align: center;
+
+    &__title {
+      font-weight: 600;
+      font-size: 40px;
+      line-height: 48px;
+      color: $primary_black;
+      margin-bottom: 32px;
+    }
+
+    &__subtitle {
+      color: $dark_grey_secondary;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+    }
+  }
+
+  &__list {
+
+    &__item {
+      margin-top: 96px;
+      display: flex;
+      align-items: center;
+
+      &__image {
+        flex-basis: 55%;
+      }
+
+      &__content {
+        flex-basis: 45%;
+        margin-left: 90px;
+      }
+
+      &__label {
+        color: $dark_green;
+        display: flex;
+        align-items: center;
+        margin-bottom: 16px;
+
+        svg line {
+          stroke: $dark_green;
+        }
+
+        span {
+          margin-left: 8px;
+          font-weight: 600;
+          font-size: 16px;
+          line-height: 24px;
+        }
+      }
+
+      &__title {
+        color: $primary_black;
+        font-weight: 600;
+        font-size: 32px;
+        line-height: 40px;
+        max-width: 450px;
+        margin-bottom: 32px;
+      }
+
+      &__text {
+        color: $dark_grey_secondary;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+
+        p {
+          margin: 0 0 32px 0;
+
+          &:last-child {
+            margin: 0;
+          }
+        }
+      }
+
+      &:nth-child(even) {
+        flex-direction: row-reverse;
+
+        .benefits__list__item__content {
+          margin-left: 0;
+          margin-right: 90px;
+        }
+      }
+    }
+  }
+}

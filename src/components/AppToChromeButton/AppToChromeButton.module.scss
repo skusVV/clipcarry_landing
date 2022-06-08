@@ -1,0 +1,48 @@
+@import "../../styles/variables.scss";
+
+.chromeButton {
+  background-color: $primary_yellow;
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 8px;
+
+  &__icon path {
+    fill: $primary_black;
+  }
+
+  &__text {
+    color: $primary_black;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0 4px 0 8px;
+
+    b {
+      color: $dark_red;
+      font-weight: 500;
+    }
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &__inverse {
+    background-color: $primary_black;
+
+    .chromeButton {
+      &__text {
+        color: $primary_white;
+
+        b {
+          color: $grey_11;
+        }
+      }
+
+      &__icon path {
+        fill: $primary_white;
+      }
+    }
+  }
+}

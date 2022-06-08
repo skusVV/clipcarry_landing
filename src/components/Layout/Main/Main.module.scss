@@ -1,0 +1,6 @@
+@import "../../../styles/variables.scss";
+
+.main {
+  // temporary. Later height between header and footer will fill content
+  min-height: calc(100vh - 205px - 84px);
+}
