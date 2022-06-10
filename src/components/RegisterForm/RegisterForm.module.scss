@@ -1,0 +1,66 @@
+@import "../../styles/variables.scss";
+
+.register {
+  max-width: 416px;
+  font-family: $app_font;
+
+  &__title {
+    color: $primary_black;
+    margin-bottom: 40px;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 34px;
+  }
+
+  &__form {
+
+    &__row {
+      margin-bottom: 24px;
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+
+      &__action {
+        position: absolute;
+        right: 0;
+        bottom: -21px;
+        color: $primary_black;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+      }
+    }
+
+    &__col {
+      // not the best way, but let it be
+      &:first-child {
+        margin-right: 12px;
+      }
+
+      &:last-child {
+        margin-left: 12px;
+      }
+    }
+
+    &__button {
+      margin-top: 47px;
+      margin-bottom: 32px;
+    }
+  }
+
+  &__signIn {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+
+    &__button {
+      font-weight: 600;
+      text-decoration: underline;
+      cursor: pointer;
+      margin-left: 8px;
+    }
+  }
+
+
+}

@@ -1,14 +1,14 @@
 import type { NextPage } from "next";
 import AuthWrapper from "../../components/Layout/AuthWrapper/AuthWrapper";
-import RegisterForm from "../../components/RegisterForm/RegisterForm";
+import LoginForm from "../../components/LoginForm/LoginForm";
 
-const RegisterPage: NextPage = () => {
+const LoginPage: NextPage = () => {
 
   return (
     <AuthWrapper>
-      <RegisterForm />
+      <LoginForm />
     </AuthWrapper>
   )
 }
 
-export default RegisterPage
+export default LoginPage

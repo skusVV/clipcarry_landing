@@ -1,0 +1,79 @@
+@import "../../styles/variables.scss";
+
+.input {
+  font-family: $app_font;
+  position: relative;
+  width: 100%;
+
+  &__field {
+    padding: 12px 16px;
+    border: 1px solid $grey_5;
+    outline: none;
+    color: $primary_black;
+    border-radius: 4px;
+    font-family: $app_font;
+    font-size: 16px;
+    width: 100%;
+
+    &:focus {
+      border-color: $primary_yellow;
+    }
+
+    &__eye {
+      padding-right: 36px;
+    }
+
+  }
+
+  &__label {
+    position: absolute;
+    background-color: $primary_white;
+    color: $primary_black;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 1px;
+    padding: 0 4px;
+    top: 0;
+    left: 16px;
+
+    &__required {
+      &::after {
+        content: '*';
+        color: $primary_red;
+      }
+    }
+  }
+
+  &__error {
+    color: $primary_red;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    margin-top: 4px;
+  }
+
+  &__eye {
+    position: absolute;
+    right: 14px;
+    top: 14px;
+
+    svg path {
+      fill: $secondary_back
+    }
+
+    &:hover {
+      cursor: pointer;
+      svg path {
+        fill: $primary_black;
+      }
+    }
+  }
+}
+
+.error {
+  border-color: $primary_red;
+
+  &:focus {
+    border-color: $primary_red;
+  }
+}
