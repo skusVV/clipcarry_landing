@@ -1,10 +1,14 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
-
+import logger from 'redux-logger'
 import userReducer from './user/userSlice';
 
 export function makeStore() {
   return configureStore({
     reducer: { user: userReducer },
+    middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }).concat(logger),
   })
 }
 

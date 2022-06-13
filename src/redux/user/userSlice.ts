@@ -1,17 +1,18 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { http } from '../../http';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { LOCAL_STORAGE_USER_ROLE, LOCAL_STORAGE_USER_TOKEN, UserRoles } from '../../constants';
+import { http, setToken } from '../../http';
 
 import type { AppState, AppThunk } from "../store";
 
 
 export interface UserState {
-  email: string,
-  userGuid: string,
-  firstName: string,
-  lastName: string,
-  token: string,
-  error: null,
-  role: string,
+  email: string;
+  userGuid: string;
+  firstName: string;
+  lastName: string;
+  token: string;
+  role: string;
+  error: string;
   loading: boolean;
 }
 
@@ -21,57 +22,122 @@ const initialState: UserState = {
   firstName: '',
   lastName: '',
   token: '',
-  error: null,
   role: '',
+  error: '',
   loading: false
 }
 
 export interface RegisterData {
-  email: string,
-  password: string,
-  firstName: string,
-  lastName: string,
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
 }
 
-export const registerUserAsync = createAsyncThunk(
-  'user/register',
-  async (data: RegisterData) => {
-    const response = await http.post('/register', data);
-    console.log("🚀 ~ file: userSlice.ts ~ line 33 ~ response", response)
-    return response.data;
-  }
-)
+export interface LoginData {
+  email: string;
+  password: string;
+}
+
+interface UserResponse {
+  userGuid?: string;
+  token: string;
+  role: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+}
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    testRd: (state, action: PayloadAction<string>) => {
-      state.email += action.payload
+    startUserRequest: (state) => {
+      state.loading = true;
+      state.error = '';
+    },
+    authUserSuccess: (state, { payload: { token, role } }: PayloadAction<UserResponse>) => {
+      state.loading = false;
+      state.error = '';
+      state.token = token;
+      state.role = role;
+      localStorage.setItem(LOCAL_STORAGE_USER_TOKEN, token);
+      localStorage.setItem(LOCAL_STORAGE_USER_ROLE, role);
+    },
+    fetchUserSuccess: (state, { payload }: PayloadAction<UserResponse>) => {
+      state.loading = false;
+      state.error = '';
+      state.email = payload.email;
+      state.firstName = payload.firstName;
+      state.lastName = payload.lastName;
+      state.token = payload.token;
+      state.role = payload.role;
+      state.userGuid = payload.userGuid;
+    },
+    userRequestFailure: (state, action: PayloadAction<string>) => {
+      state.loading = false;
+      state.error = action.payload;
     }
-  },
-
-  extraReducers: (builder) => {
-    builder
-      .addCase(registerUserAsync.pending, (state) => {
-        state.loading = true
-      })
-      .addCase(registerUserAsync.fulfilled, (state, action) => {
-        state.loading = false,
-        state.token = action.payload.token
-      })
-  },
+  }
 })
 
-export const { testRd } = userSlice.actions
+export const {
+  startUserRequest,
+  authUserSuccess,
+  userRequestFailure,
+  fetchUserSuccess
+} = userSlice.actions
 
-export const selectEmail = (state: AppState) => state.user.email;
+export const selectError = (state: AppState) => state.user.error;
+export const selectToken = (state: AppState) => state.user.token;
+export const selectRole = (state: AppState) => state.user.role;
+export const selectUser = (state: AppState) => state.user;
 
-
-export const registerUser = (data: RegisterData): AppThunk =>
+export const registerUser = (data: RegisterData, callback: () => void): AppThunk =>
   async (dispatch, getState) => {
-    const user = await dispatch(registerUserAsync(data));
-    console.log("🚀 ~ file: userSlice.ts ~ line 74 ~ user", user)
+    const { user: { role, userGuid } } = getState();
+    try {
+      dispatch(startUserRequest());
+
+      if (userGuid && role === UserRoles.GUEST) {
+        data['userGuid'] = userGuid;
+      }
+
+      const user = await http.post('/register', data);
+
+      dispatch(authUserSuccess(user.data));
+      callback();
+    } catch (error) {
+      dispatch(userRequestFailure(error?.response?.data));
+    }
+}
+
+
+export const getUser = (token = ''): AppThunk =>
+  async (dispatch) => {
+    try {
+      if (token) {
+        dispatch(startUserRequest());
+        const user = await http.get('/user', setToken(token));
+
+        dispatch(fetchUserSuccess({ ...user.data, token }));
+      }
+    } catch (error) {
+      dispatch(userRequestFailure(error?.response?.data));
+    }
+}
+
+export const loginUser = (data: LoginData, callback: () => void): AppThunk =>
+  async (dispatch, getState) => {
+    try {
+      dispatch(startUserRequest());
+      const user = await http.post('/login', data);
+
+      dispatch(authUserSuccess(user.data));
+      callback();
+    } catch (error) {
+      dispatch(userRequestFailure(error?.response?.data));
+    }
 }
 
 export default userSlice.reducer

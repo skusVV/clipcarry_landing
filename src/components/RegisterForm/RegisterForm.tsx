@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
@@ -6,6 +6,10 @@ import Input from "../Input/Input";
 import styles from "./RegisterForm.module.scss";
 import FullButton from "../FullButton/FullButton";
 import Link from "next/link";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux.hooks";
+import { registerUser, selectError } from "../../redux/user/userSlice";
+import { useRouter } from "next/router";
+
 
 type Inputs = {
   firstName: string;
@@ -19,6 +23,7 @@ const schema = yup.object().shape({
   lastName: yup.string().required('Last name is Required'),
   email: yup.string().email('Please enter valid email').required('Email is required'),
   password: yup.string().required('Password is required')
+  // Todo: discuss about password pattern
   // password: yup
   //   .string()
   //   .required('Please Enter your password')
@@ -29,13 +34,23 @@ const schema = yup.object().shape({
 });
 
 const RegisterForm = () => {
-  const { formState: {errors}, handleSubmit, control } = useForm<Inputs>({
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const error = useAppSelector(selectError);
+
+  const { formState: { errors }, handleSubmit, control, setError } = useForm<Inputs>({
     resolver: yupResolver(schema),
     reValidateMode: 'onBlur'
   })
 
+  useEffect(() => {
+    setError('email', { message: error });
+  }, [error]);
+
   const onRegisterSubmit = (data) => {
-    console.log("🚀 ~ file: RegisterForm.tsx ~ line 34 ~ onRegisterSubmit ~ data", data)
+    dispatch(registerUser(data, () => {
+      router.push('/home');
+    }));
   }
 
   return (
@@ -44,7 +59,6 @@ const RegisterForm = () => {
       <form className={styles.register__form} onSubmit={handleSubmit(onRegisterSubmit)}>
         <div className={styles.register__form__row}>
           <div className={styles.register__form__col}>
-            {/* Removed 'required' from the props. On my opinion all inputs are required, so we don't need to highlight some fields with the star */}
             <Input type="text" placeholder="First name" label="First name" name={'firstName'} control={control} errors={errors}/>
           </div>
           <div className={styles.register__form__col}>
@@ -56,7 +70,6 @@ const RegisterForm = () => {
         </div>
         <div className={styles.register__form__row}>
           <Input type="password" placeholder="Enter your password" showEye label="Password" name={'password'} control={control} errors={errors}/>
-          {/* <div className={styles.register__form__row__action}>Forgot password?</div>  */} {/* I don't really understand why we need here Forgot password. User don't have password at all */}
         </div>
         <div className={styles.register__form__button}>
           <FullButton text="Get Started" type="submit"/>

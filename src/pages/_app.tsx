@@ -5,6 +5,7 @@ import type { AppProps } from 'next/app'
 
 import store from '../redux/store'
 import Head from 'next/head'
+import ProfileProvider from './profile'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -16,7 +17,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Component {...pageProps} />
+      <ProfileProvider>
+        <Component {...pageProps} />
+      </ProfileProvider>
     </Provider>
   )
 }

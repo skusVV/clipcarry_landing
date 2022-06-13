@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
@@ -6,6 +6,9 @@ import Input from "../Input/Input";
 import styles from "./LoginForm.module.scss";
 import FullButton from "../FullButton/FullButton";
 import Link from "next/link";
+import { loginUser, selectError } from "../../redux/user/userSlice";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux.hooks";
+import { useRouter } from "next/router";
 
 type Inputs = {
   email: string;
@@ -18,14 +21,25 @@ const schema = yup.object().shape({
 });
 
 const LoginForm = () => {
-  const { formState: {errors}, handleSubmit, control } = useForm<Inputs>({
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const error = useAppSelector(selectError);
+
+  const { formState: {errors}, handleSubmit, control, setError } = useForm<Inputs>({
     resolver: yupResolver(schema),
     reValidateMode: 'onBlur'
   })
 
   const onLoginSubmit = (data) => {
-    console.log("Login data", data)
+    dispatch(loginUser(data, () => {
+      router.push('/home');
+    }));
   }
+
+  useEffect(() => {
+    setError('email', { message: error });
+    setError('password', { message: error });
+  }, [error]);
 
   return (
     <div className={styles.login}>
