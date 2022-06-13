@@ -18,7 +18,7 @@ const Header = () => {
     if (!user.token || user.role === UserRoles.GUEST) {
       router.push('/login');
     } else if (user.token && user.role === UserRoles.USER) {
-      // Todo: add redirect to payment page
+      router.push('/payment');
     }
   };
 
