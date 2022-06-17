@@ -17,16 +17,16 @@ const RegisterPage: NextPage = () => {
   const { access_token: paramToken } = router.query;
 
   useDidUpdateEffect(() => {
-	if (storageToken && userRole !== UserRoles.GUEST) {
-		router.push('/home');
-	}
+    if (storageToken && userRole !== UserRoles.GUEST) {
+      router.push('/home');
+    }
 
-	if (paramToken) {
-		const token = isArray(paramToken) ? paramToken[0] : paramToken; // typescript tricky moment
-		router.replace('/register', undefined, { shallow: true });
-		localStorage.setItem(LOCAL_STORAGE_USER_TOKEN, token);
-		dispatch(getUser(token));
-	}
+    if (paramToken) {
+      const token = isArray(paramToken) ? paramToken[0] : paramToken; // typescript tricky moment
+      router.replace('/register', undefined, { shallow: true });
+      localStorage.setItem(LOCAL_STORAGE_USER_TOKEN, token);
+      dispatch(getUser(token));
+    }
   }, [paramToken, storageToken]);
 
   return (

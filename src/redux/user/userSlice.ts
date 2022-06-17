@@ -92,6 +92,7 @@ export const selectError = (state: AppState) => state.user.error;
 export const selectToken = (state: AppState) => state.user.token;
 export const selectRole = (state: AppState) => state.user.role;
 export const selectUser = (state: AppState) => state.user;
+export const selectLoading = (state: AppState) => state.user.loading;
 
 export const registerUser = (data: RegisterData, callback: () => void): AppThunk =>
   async (dispatch, getState) => {

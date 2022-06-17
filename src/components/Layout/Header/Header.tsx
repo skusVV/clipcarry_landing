@@ -39,7 +39,7 @@ const Header = () => {
           <Link href="#">
             <a className={styles.header__nav__item}>Tutorial</a>
           </Link>
-          <Link href="#">
+          <Link href="/home#pricing-section">
             <a className={styles.header__nav__item}>Pricing</a>
           </Link>
           { user.role !== UserRoles.PAID_USER && <div onClick={onPremiumClick} className={styles.header__nav__btn}>

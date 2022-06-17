@@ -30,7 +30,7 @@ const Footer = () => {
             <Link href="/home">
               <a className={styles.footer__top__nav__item}>Tutorial</a>
             </Link>
-            <Link href="/home">
+            <Link href="/home#pricing-section">
               <a className={styles.footer__top__nav__item}>Pricing</a>
             </Link>
             <Link href="/home">

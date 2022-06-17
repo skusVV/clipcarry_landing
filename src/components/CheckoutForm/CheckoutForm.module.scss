@@ -1,0 +1,141 @@
+@import "../../styles/variables.scss";
+
+.form {
+  align-self: center;
+  border-radius: 4px;
+  padding: 32px 40px;
+  border: 1px solid $grey_5;
+
+  &__element {
+    margin-bottom: 24px;
+  }
+
+  &__message {
+    color: rgb(105, 115, 134);
+    font-size: 16px;
+    line-height: 20px;
+    padding-top: 12px;
+    text-align: center;
+  }
+
+  button {
+    background: $secondary_back;
+    font-family: Arial, sans-serif;
+    color: $primary_white;
+    box-shadow: 0px -1px 1px rgba(0, 0, 0, 0.12), 0px 2px 5px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.08);
+    border-radius: 4px;
+    border: 0;
+    padding: 12px 16px;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 24px;
+    cursor: pointer;
+    display: block;
+    transition: all 0.2s ease;
+    width: 100%;
+  }
+
+  button:hover {
+    filter: contrast(115%);
+  }
+
+  button:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+
+  /* spinner/processing state, errors */
+  &__spinner,
+  &__spinner:before,
+  &__spinner:after {
+    border-radius: 50%;
+  }
+
+  &__spinner {
+    color: #ffffff;
+    font-size: 22px;
+    text-indent: -99999px;
+    margin: 0px auto;
+    position: relative;
+    width: 20px;
+    height: 20px;
+    box-shadow: inset 0 0 0 2px;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+
+  &__spinner:before,
+  &__spinner:after {
+    position: absolute;
+    content: '';
+  }
+
+  &__spinner:before {
+    width: 10.4px;
+    height: 20.4px;
+    background: #5469d4;
+    border-radius: 20.4px 0 0 20.4px;
+    top: -0.2px;
+    left: -0.2px;
+    -webkit-transform-origin: 10.4px 10.2px;
+    transform-origin: 10.4px 10.2px;
+    -webkit-animation: loading 2s infinite ease 1.5s;
+    animation: loading 2s infinite ease 1.5s;
+  }
+
+  &__spinner:after {
+    width: 10.4px;
+    height: 10.2px;
+    background: #5469d4;
+    border-radius: 0 10.2px 10.2px 0;
+    top: -0.1px;
+    left: 10.2px;
+    -webkit-transform-origin: 0px 10.2px;
+    transform-origin: 0px 10.2px;
+    -webkit-animation: loading 2s infinite ease;
+    animation: loading 2s infinite ease;
+  }
+
+  &__disclaimer {
+    color: #000000;
+    font-family: $app_font;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    margin-top: 32px;
+    position: relative;
+    padding-left: 28px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      height: 20px;
+      width: 20px;
+      left: 0;
+      top: 2px;
+      background-image: url('../../../public/charm_info.png');
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+  }
+}
+
+@keyframes loading {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .form {
+    width: 80vw;
+    min-width: initial;
+  }
+}
