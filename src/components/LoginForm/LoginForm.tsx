@@ -43,14 +43,14 @@ const LoginForm = () => {
 
   return (
     <div className={styles.login}>
-      <div className={styles.login__title}>Login</div>  {/* on design we have title Create your account!. It's a bit strange */}
+      <div className={styles.login__title}>Log in</div>
       <form className={styles.login__form} onSubmit={handleSubmit(onLoginSubmit)}>
         <div className={styles.login__form__row}>
           <Input type="text" placeholder="Email" label="Email" name={'email'} control={control} errors={errors}/>
         </div>
         <div className={styles.login__form__row}>
           <Input type="password" placeholder="Enter your password" showEye label="Password" name={'password'} control={control} errors={errors}/>
-          <div className={styles.login__form__row__action}>Forgot password?</div> {/* Todo: add forgot password page */}
+          {/* <div className={styles.login__form__row__action}>Forgot password?</div>  disabled for now, will be implemented later*/}
         </div>
         <div className={styles.login__form__button}>
           <FullButton text="Sign In" type="submit"/>

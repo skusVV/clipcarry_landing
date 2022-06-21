@@ -129,13 +129,27 @@ export const getUser = (token = ''): AppThunk =>
 }
 
 export const loginUser = (data: LoginData, callback: () => void): AppThunk =>
-  async (dispatch, getState) => {
+  async (dispatch) => {
     try {
       dispatch(startUserRequest());
       const user = await http.post('/login', data);
 
       dispatch(authUserSuccess(user.data));
       callback();
+    } catch (error) {
+      dispatch(userRequestFailure(error?.response?.data));
+    }
+}
+
+export const promoteUser = (token: string): AppThunk =>
+  async (dispatch) => {
+    try {
+      if (token) {
+        dispatch(startUserRequest());
+        const response = await http.patch('/user/promote', {}, setToken(token));
+
+        dispatch(authUserSuccess(response.data));
+      }
     } catch (error) {
       dispatch(userRequestFailure(error?.response?.data));
     }
