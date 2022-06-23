@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React from 'react';
-import { UserRoles } from '../../constants';
+import { EXTENSION_LINK, UserRoles } from '../../constants';
 import { useAppSelector } from '../../hooks/redux.hooks';
 import { selectUser } from '../../redux/user/userSlice';
 import Wrapper from '../Layout/Wrapper/Wrapper';
@@ -19,8 +19,11 @@ const Pricing = () => {
   };
 
   const onGetStartedClick = () => {
-    // Todo: clarify where we should redirect here
-    router.push('/register');
+    if (!user.token || user.role === UserRoles.GUEST) {
+      router.push('/register');
+    } else if (user.token && user.role === UserRoles.USER) {
+      window.open(EXTENSION_LINK, '_blank');
+    }
   };
 
   return (

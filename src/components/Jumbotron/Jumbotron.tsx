@@ -6,6 +6,7 @@ import linkedinScreen from "../../../public/linkedin_screen.png";
 import Wrapper from "../Layout/Wrapper/Wrapper";
 import AppToChromeButton from "../AppToChromeButton/AppToChromeButton";
 import background from "../../../public/honeycomb.png";
+import { EXTENSION_LINK } from "../../constants";
 
 const Jumbotron = () => (
   <Wrapper className={styles.wrapper}>
@@ -32,8 +33,8 @@ const Jumbotron = () => (
           </div>
         </div>
         <div className={styles.jumbotron__cta}>
-          <Link href="/home">
-            <a><AppToChromeButton inverse={true}/></a>
+          <Link href={EXTENSION_LINK}>
+            <a target='_blank'><AppToChromeButton inverse={true}/></a>
           </Link>
         </div>
       </div>

@@ -16,6 +16,8 @@
 
   &__right {
     width: 547px;
+    display: flex;
+    align-items: center;
   }
 
   &__title {
@@ -92,5 +94,14 @@
         }
       }
     }
+  }
+
+  &__message {
+    border-radius: 4px;
+    padding: 32px 40px;
+    border: 1px solid $grey_5;
+    display: flex;
+    justify-content: center;
+    width: 100%;
   }
 }

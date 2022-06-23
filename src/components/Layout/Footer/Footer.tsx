@@ -5,6 +5,7 @@ import Link from "next/link";
 import Wrapper from "../Wrapper/Wrapper";
 import logo from "../../../../public/logo_white.png";
 import AppToChromeButton from "../../AppToChromeButton/AppToChromeButton";
+import { EXTENSION_LINK } from "../../../constants";
 
 const Footer = () => {
 
@@ -24,26 +25,26 @@ const Footer = () => {
             </Link>
           </div>
           <nav className={styles.footer__top__nav}>
-            <Link href="/home">
+            {/* <Link href="/home">
               <a className={styles.footer__top__nav__item}>Setting</a>
             </Link>
             <Link href="/home">
               <a className={styles.footer__top__nav__item}>Tutorial</a>
-            </Link>
+            </Link> */}
             <Link href="/home#pricing-section">
               <a className={styles.footer__top__nav__item}>Pricing</a>
             </Link>
-            <Link href="/home">
+            {/* <Link href="/home">
               <a className={styles.footer__top__nav__item}>Privacy Policy</a>
-            </Link>
+            </Link> */}
           </nav>
         </div>
         <div className={styles.footer__bottom}>
           <p className={styles.footer__bottom__copyright}>
             Copyright &copy; {getCurrentYear()}. Clipcarry. All rights reserved.
           </p>
-          <Link href="/home">
-            <a className={styles.footer__bottom__btn}><AppToChromeButton/></a>
+          <Link href={EXTENSION_LINK}>
+            <a target='_blank' className={styles.footer__bottom__btn}><AppToChromeButton/></a>
           </Link>
         </div>
       </footer>

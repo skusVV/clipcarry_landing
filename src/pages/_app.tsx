@@ -6,8 +6,22 @@ import type { AppProps } from 'next/app'
 import store from '../redux/store'
 import Head from 'next/head'
 import ProfileProvider from './profile'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
+import { LOCAL_STORAGE_REGISTRATION_PROMOCODE } from '../constants'
+import { isArray } from 'lodash'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+
+  const { invite } = router.query;
+  useEffect(() => {
+    if (invite) {
+      const promoCode = isArray(invite) ? invite[0] : invite;
+      localStorage.setItem(LOCAL_STORAGE_REGISTRATION_PROMOCODE, promoCode);
+    }
+  }, [invite]);
+
   return (
     <Provider store={store}>
       <Head>

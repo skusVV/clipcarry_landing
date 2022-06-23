@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { LOCAL_STORAGE_USER_TOKEN } from "../../constants";
 import { http, setToken } from "../../http";
 import { AppState, AppThunk } from "../store";
 
@@ -49,7 +50,8 @@ export const selectSecret = (state: AppState) => state.stripe.clientSecret;
 export const createPaymentIntent = (): AppThunk =>
   async (dispatch, getState) => {
     try {
-      const { user: { token } } = getState();
+      const { user } = getState();
+      const token = user.token || localStorage.getItem(LOCAL_STORAGE_USER_TOKEN) || '';
       dispatch(startStripeRequest());
       const result = await http.post('/create-payment-intent', { price: 900 }, setToken(token));
       dispatch(stripeRequestSuccess(result.data));

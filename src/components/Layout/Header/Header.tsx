@@ -33,12 +33,12 @@ const Header = () => {
           </Link>
         </div>
         <nav className={styles.header__nav}>
-          <Link href="#">
+          {/* <Link href="#">
             <a className={styles.header__nav__item}>Setting</a>
           </Link>
           <Link href="#">
             <a className={styles.header__nav__item}>Tutorial</a>
-          </Link>
+          </Link> */}
           <Link href="/home#pricing-section">
             <a className={styles.header__nav__item}>Pricing</a>
           </Link>

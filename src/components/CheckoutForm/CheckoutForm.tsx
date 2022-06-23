@@ -5,11 +5,13 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 import styles from './CheckoutForm.module.scss';
+import { BASE_URL } from "../../constants";
 
 export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
   const [message, setMessage] = useState(null);
+  const [paymentError, setPaymentError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isFormActive, setIsFormActive] = useState(false);
 
@@ -35,10 +37,10 @@ export default function CheckoutForm() {
           setMessage("Your payment is processing.");
           break;
         case "requires_payment_method":
-          setMessage("Your payment was not successful, please try again.");
+          setPaymentError("Your payment was not successful, please try again.");
           break;
         default:
-          setMessage("Something went wrong.");
+          setPaymentError("Something went wrong.");
           break;
       }
     });
@@ -57,15 +59,15 @@ export default function CheckoutForm() {
       elements,
       confirmParams: {
 
-        return_url: "http://localhost:3000/payment-success",
+        return_url: `${BASE_URL}/payment-success`,
       },
     });
-    // Payment failed! Please check your credit card details and try again.
-
     if (error.type === "card_error" || error.type === "validation_error") {
-      setMessage(error.message);
+      // setPaymentError(error.message);
+      setPaymentError("Payment failed! Please check your credit card details and try again.");
+      // Lauri's request "Payment failed! Please check your credit card details and try again."
     } else {
-      setMessage("An unexpected error occurred.");
+      setPaymentError("Payment failed! Please check your credit card details and try again.");
     }
 
     setIsLoading(false);
@@ -85,7 +87,8 @@ export default function CheckoutForm() {
             {isLoading ? <div className={styles.form__spinner} id="spinner"></div> : "Pay $9 and upgrade"}
           </span>
         </button>
-        {message && <div className={styles.form__message}>{message}</div>}
+        {!paymentError && message && <div className={styles.form__message}>{message}</div>}
+        {!message && paymentError && <div className={`${styles.form__message} ${styles.form__message__error}`}>{paymentError}</div>}
         <div className={styles.form__disclaimer}>Your subscription will automatically renew every month.</div>
       </> : <div className={styles.form__spinner} id="spinner"></div>}
     </form>

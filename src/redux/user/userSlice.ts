@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { LOCAL_STORAGE_USER_ROLE, LOCAL_STORAGE_USER_TOKEN, UserRoles } from '../../constants';
+import { LOCAL_STORAGE_REGISTRATION_PROMOCODE, LOCAL_STORAGE_USER_ROLE, LOCAL_STORAGE_USER_TOKEN, UserRoles } from '../../constants';
 import { http, setToken } from '../../http';
 
 import type { AppState, AppThunk } from "../store";
@@ -12,6 +12,7 @@ export interface UserState {
   lastName: string;
   token: string;
   role: string;
+  paymentExpirationDate: string;
   error: string;
   loading: boolean;
 }
@@ -23,6 +24,7 @@ const initialState: UserState = {
   lastName: '',
   token: '',
   role: '',
+  paymentExpirationDate: '',
   error: '',
   loading: false
 }
@@ -32,6 +34,7 @@ export interface RegisterData {
   password: string;
   firstName: string;
   lastName: string;
+  promoCode?: string;
 }
 
 export interface LoginData {
@@ -46,6 +49,7 @@ interface UserResponse {
   firstName?: string;
   lastName?: string;
   email?: string;
+  paymentExpirationDate?: string;
 }
 
 export const userSlice = createSlice({
@@ -73,6 +77,7 @@ export const userSlice = createSlice({
       state.token = payload.token;
       state.role = payload.role;
       state.userGuid = payload.userGuid;
+      state.paymentExpirationDate = payload.paymentExpirationDate;
     },
     userRequestFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
@@ -97,11 +102,17 @@ export const selectLoading = (state: AppState) => state.user.loading;
 export const registerUser = (data: RegisterData, callback: () => void): AppThunk =>
   async (dispatch, getState) => {
     const { user: { role, userGuid } } = getState();
+    const promoCode = localStorage.getItem(LOCAL_STORAGE_REGISTRATION_PROMOCODE);
+
     try {
       dispatch(startUserRequest());
 
       if (userGuid && role === UserRoles.GUEST) {
         data['userGuid'] = userGuid;
+      }
+
+      if (promoCode) {
+        data['promoCode'] = promoCode;
       }
 
       const user = await http.post('/register', data);
