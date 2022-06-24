@@ -1,7 +1,6 @@
 import '../styles/globals.css'
 
 import { Provider } from 'react-redux'
-import type { AppProps } from 'next/app'
 
 import store from '../redux/store'
 import Head from 'next/head'
@@ -11,7 +10,7 @@ import { useEffect } from 'react'
 import { LOCAL_STORAGE_REGISTRATION_PROMOCODE } from '../constants'
 import { isArray } from 'lodash'
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+export default function MyApp({ Component, pageProps }: any) {
   const router = useRouter();
 
   const { invite } = router.query;
