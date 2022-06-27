@@ -9,15 +9,11 @@ import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { LOCAL_STORAGE_REGISTRATION_PROMOCODE } from '../constants'
 import { isArray } from 'lodash'
-import MessagePopup from "../components/messagePopup/MessagePopup";
-import {useAppSelector} from "../hooks/redux.hooks";
-import {selectIsOpen} from "../redux/message/message";
 
 export default function MyApp({ Component, pageProps }: any) {
   const router = useRouter();
-  // const isMessageOpen = useAppSelector(selectIsOpen);
-
   const { invite } = router.query;
+
   useEffect(() => {
     if (invite) {
       const promoCode = isArray(invite) ? invite[0] : invite;
@@ -37,7 +33,6 @@ export default function MyApp({ Component, pageProps }: any) {
       <ProfileProvider>
         <Component {...pageProps} />
       </ProfileProvider>
-      {/*{ isMessageOpen && <MessagePopup />}*/}
     </Provider>
   )
 }

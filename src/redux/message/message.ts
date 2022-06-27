@@ -34,6 +34,7 @@ export const {
 } = messageSlice.actions
 
 export const showMessagePopup = ({ message }) => {
+
     return (dispatch) => {
         dispatch(openPopup(message));
 
