@@ -3,6 +3,7 @@ import { LOCAL_STORAGE_REGISTRATION_PROMOCODE, LOCAL_STORAGE_USER_ROLE, LOCAL_ST
 import { http, setToken } from '../../http';
 
 import type { AppState, AppThunk } from "../store";
+import {showMessagePopup} from "../message/message";
 
 
 export interface UserState {
@@ -118,6 +119,7 @@ export const registerUser = (data: RegisterData, callback: () => void): AppThunk
       const user = await http.post('/register', data);
 
       dispatch(authUserSuccess(user.data));
+      dispatch(showMessagePopup({ message: 'You have been successfully registered and logged in.' }));
       callback();
     } catch (error) {
       dispatch(userRequestFailure(error?.response?.data));

@@ -18,7 +18,7 @@ const RegisterPage: NextPage = () => {
 
   useDidUpdateEffect(() => {
     if (storageToken && userRole !== UserRoles.GUEST) {
-      router.push('/home');
+      router.push('/');
     }
 
     if (paramToken) {

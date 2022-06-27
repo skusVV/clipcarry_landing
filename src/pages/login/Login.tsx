@@ -12,7 +12,7 @@ const LoginPage: NextPage = () => {
     const token = localStorage.getItem(LOCAL_STORAGE_USER_TOKEN);
 
     if (token) {
-      router.push('/home');
+      router.push('/');
     }
   }, []);
 

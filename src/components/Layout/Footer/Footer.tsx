@@ -18,7 +18,7 @@ const Footer = () => {
       <footer className={styles.footer}>
         <div className={styles.footer__top}>
           <div className={styles.footer__top__logo}>
-            <Link href="/home">
+            <Link href="/">
               <a>
                 <Image src={logo} alt="Clipcarry Logo" />
               </a>
@@ -31,7 +31,7 @@ const Footer = () => {
             <Link href="/home">
               <a className={styles.footer__top__nav__item}>Tutorial</a>
             </Link> */}
-            <Link href="/home#pricing-section">
+            <Link href="/#pricing-section">
               <a className={styles.footer__top__nav__item}>Pricing</a>
             </Link>
             {/* <Link href="/home">

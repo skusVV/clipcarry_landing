@@ -26,7 +26,7 @@ const Header = () => {
     <Wrapper>
       <header className={styles.header}>
         <div className={styles.header__logo}>
-          <Link href="/home">
+          <Link href="/">
             <a>
               <Image src={logo} alt="Clipcarry Logo" />
             </a>
@@ -39,7 +39,7 @@ const Header = () => {
           <Link href="#">
             <a className={styles.header__nav__item}>Tutorial</a>
           </Link> */}
-          <Link href="/home#pricing-section">
+          <Link href="/#pricing-section">
             <a className={styles.header__nav__item}>Pricing</a>
           </Link>
           { user.role !== UserRoles.PAID_USER && <div onClick={onPremiumClick} className={styles.header__nav__btn}>

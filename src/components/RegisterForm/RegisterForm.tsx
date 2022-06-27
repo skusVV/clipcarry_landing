@@ -49,7 +49,7 @@ const RegisterForm = () => {
 
   const onRegisterSubmit = (data) => {
     dispatch(registerUser(data, () => {
-      router.push('/home');
+      router.push('/');
     }));
   }
 
