@@ -102,6 +102,12 @@
     border: 1px solid $grey_5;
     display: flex;
     justify-content: center;
+    flex-direction: column;
     width: 100%;
+
+    a {
+      text-decoration: underline;
+      margin-top: 12px;
+    }
   }
 }

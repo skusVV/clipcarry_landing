@@ -32,7 +32,7 @@ const LoginForm = () => {
 
   const onLoginSubmit = (data) => {
     dispatch(loginUser(data, () => {
-      router.push('/home');
+      router.push('/');
     }));
   }
 

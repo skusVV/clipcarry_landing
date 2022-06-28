@@ -1,12 +1,14 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import logger from 'redux-logger'
 import userReducer from './user/userSlice';
+import messageReducer from './message/message';
 import stripeReducer from './stripe/stripeSlice';
 
 export function makeStore() {
   return configureStore({
     reducer: {
       user: userReducer,
+      message: messageReducer,
       stripe: stripeReducer
     },
     middleware: (getDefaultMiddleware) =>

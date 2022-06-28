@@ -21,7 +21,7 @@ const PaymentSuccessPage: NextPage = () => {
   }, []);
 
   const handleHomeClick = () => {
-    router.push('/home');
+    router.push('/');
   }
 
   return (
