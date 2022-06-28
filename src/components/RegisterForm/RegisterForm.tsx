@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux.hooks";
 import { registerUser, selectError } from "../../redux/user/userSlice";
 import { useRouter } from "next/router";
+import {showMessagePopup} from "../../redux/message/message";
 
 
 type Inputs = {
@@ -50,6 +51,7 @@ const RegisterForm = () => {
   const onRegisterSubmit = (data) => {
     dispatch(registerUser(data, () => {
       router.push('/payment');
+      // dispatch(showMessagePopup({ message: 'You have been successfully registered and logged in.' }));
     }));
   }
 

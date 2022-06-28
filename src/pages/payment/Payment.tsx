@@ -9,11 +9,13 @@ import CheckoutForm from "../../components/CheckoutForm/CheckoutForm";
 import { createPaymentIntent, selectSecret } from "../../redux/stripe/stripeSlice";
 import { selectUser } from "../../redux/user/userSlice";
 import { useRouter } from "next/router";
-import { STRIPE_PUBLIC_KEY, UserRoles } from "../../constants";
+import { STRIPE_PUBLIC_KEY, UserRoles, EXTENSION_LINK } from "../../constants";
 import { useDidUpdateEffect } from "../../hooks/custom.hooks";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { isEmpty } from "lodash";
+import AppToChromeButton from "../../components/AppToChromeButton/AppToChromeButton";
+import Link from "next/link";
 
 const stripePromise = loadStripe(STRIPE_PUBLIC_KEY);
 
@@ -82,6 +84,9 @@ const PaymentPage: NextPage = () => {
             { paidAccount ? (
               <div className={styles.payment__message}>
                 <div>You already subscribed until: {moment(user.paymentExpirationDate).format('MM-DD-YYYY')}</div>
+                <Link href={EXTENSION_LINK}>
+                  <a target='_blank'>Download the Chrome extension and log in with your email to start using Clipcarry Premium</a>
+                </Link>
               </div>
             ) : clientSecret && (
               <Elements options={options} stripe={stripePromise}>

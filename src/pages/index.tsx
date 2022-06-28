@@ -21,10 +21,14 @@ const HomePage: NextPage = () => {
         if (invite) {
             const promoCode = isArray(invite) ? invite[0] : invite;
             localStorage.setItem(LOCAL_STORAGE_REGISTRATION_PROMOCODE, promoCode);
-            dispatch(showMessagePopup({ message: 'One Year Discount has been applied. Please, register to proceed!' }))
-
         }
     }, [invite]);
+
+    useEffect(() => {
+        if (invite) {
+            dispatch(showMessagePopup({ message: 'One Year Discount has been applied. Please, register to proceed!' }));
+        }
+    });
 
   return (
     <Layout>
