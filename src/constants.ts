@@ -1,6 +1,7 @@
 export const LOCAL_STORAGE_USER_TOKEN = 'user_token';
 export const LOCAL_STORAGE_USER_ROLE = 'user_role';
 export const LOCAL_STORAGE_REGISTRATION_PROMOCODE = 'promo_code';
+export const LOCAL_STORAGE_TOKEN_REFRESH_TIME = 'token_refresh_time';
 
 export enum UserRoles {
   GUEST = 'guest',

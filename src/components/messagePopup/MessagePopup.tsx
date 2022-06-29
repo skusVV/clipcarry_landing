@@ -12,7 +12,7 @@ const MessagePopup = () => {
     return (
         <div className={styles.popup}>
             <div className={styles.popup__container}>
-                <Image className={styles.popup__message} src={checkIcon} alt="ok"/>
+                <Image src={checkIcon} alt="ok"/>
                 <div className={styles.popup__message}>{ message }</div>
             </div>
         </div>

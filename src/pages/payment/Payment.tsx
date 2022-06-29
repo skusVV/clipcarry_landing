@@ -14,7 +14,6 @@ import { useDidUpdateEffect } from "../../hooks/custom.hooks";
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { isEmpty } from "lodash";
-import AppToChromeButton from "../../components/AppToChromeButton/AppToChromeButton";
 import Link from "next/link";
 
 const stripePromise = loadStripe(STRIPE_PUBLIC_KEY);

@@ -40,7 +40,7 @@ export const showMessagePopup = ({ message }) => {
 
         setTimeout(() => {
             dispatch(closePopup());
-        }, 5000);
+        }, 3000);
     };
 };
 

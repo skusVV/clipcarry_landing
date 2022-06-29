@@ -1,10 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { LOCAL_STORAGE_REGISTRATION_PROMOCODE, LOCAL_STORAGE_USER_ROLE, LOCAL_STORAGE_USER_TOKEN, UserRoles } from '../../constants';
+import moment from 'moment';
+import { LOCAL_STORAGE_REGISTRATION_PROMOCODE, LOCAL_STORAGE_TOKEN_REFRESH_TIME, LOCAL_STORAGE_USER_ROLE, LOCAL_STORAGE_USER_TOKEN, UserRoles } from '../../constants';
 import { http, setToken } from '../../http';
-
 import type { AppState, AppThunk } from "../store";
-// import {showMessagePopup} from "../message/message";
-
 
 export interface UserState {
   email: string;
@@ -68,6 +66,7 @@ export const userSlice = createSlice({
       state.role = role;
       localStorage.setItem(LOCAL_STORAGE_USER_TOKEN, token);
       localStorage.setItem(LOCAL_STORAGE_USER_ROLE, role);
+      localStorage.setItem(LOCAL_STORAGE_TOKEN_REFRESH_TIME, moment().toISOString());
     },
     fetchUserSuccess: (state, { payload }: PayloadAction<UserResponse>) => {
       state.loading = false;
@@ -166,5 +165,18 @@ export const promoteUser = (token: string): AppThunk =>
       dispatch(userRequestFailure(error?.response?.data));
     }
 }
+
+export const refreshUserToken = (token: string): AppThunk =>
+  async (dispatch) => {
+    try {
+      if (token) {
+        dispatch(startUserRequest());
+        const response = await http.post('/refresh-token', {}, setToken(token));
+        dispatch(authUserSuccess(response.data));
+      }
+    } catch (error) {
+      dispatch(userRequestFailure(error?.response?.data));
+    }
+  }
 
 export default userSlice.reducer
