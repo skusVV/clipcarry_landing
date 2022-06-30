@@ -12,4 +12,4 @@ export enum UserRoles {
 export const API_URL = 'http://localhost:3001';
 export const BASE_URL = 'http://localhost:3000';
 export const EXTENSION_LINK = 'https://chrome.google.com/webstore/detail/clipcarry/fjiacngjbjpkmamejjepoafgicjdbdhl?hl=en&authuser=0';
-export const STRIPE_PUBLIC_KEY = 'pk_test_51LB1byIQyZGkbh1HBIXNvF61b0QvwXqq5Io9Nv1qiLtHMFBx4ro0G5IYgWhsWEqzDjfJR5geSPsZeQiuFG7L29uY00Vf8UujWn';
+export const STRIPE_PUBLIC_KEY = 'pk_live_51IMZX0LElgPxWWurcCq98TP0jgPPIgWpUJLGpHZ5HoS1EUmQAKgRbDYxWH1ibKXUHnkf6EyF95ApuDbzJ3RCxqK100AudGGfsl';
