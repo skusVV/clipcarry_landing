@@ -11,17 +11,19 @@ const PaymentSuccessPage: NextPage = () => {
   const loading = useAppSelector(selectLoading);
 
   useEffect(() => {
-    const token = localStorage.getItem(LOCAL_STORAGE_USER_TOKEN);
-
-    if (token) {
-      dispatch(promoteUser(token));
-    }
+    console.log('router', router);
+    // cs_test_a1AfQEFs2xmD6XU5ILZDo0tysVIMwDxcGB3yaOa52t21kfxvIne06dqgFq
+    // const token = localStorage.getItem(LOCAL_STORAGE_USER_TOKEN);
+    //
+    // if (token) {
+    //   dispatch(promoteUser(token));
+    // }
   }, []);
 
   useEffect(() => {
-    if (!loading) {
-      router.push('/payment');
-    }
+    // if (!loading) {
+    //   router.push('/payment');
+    // }
   }, [loading]);
 
   return (
