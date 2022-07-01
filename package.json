@@ -13,6 +13,7 @@
     "@stripe/react-stripe-js": "^1.8.1",
     "@stripe/stripe-js": "^1.32.0",
     "axios": "^0.27.2",
+    "cookie-cutter": "^0.2.0",
     "less": "^4.1.2",
     "less-loader": "^11.0.0",
     "lodash": "^4.17.21",
