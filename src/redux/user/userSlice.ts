@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import moment from 'moment';
+import cookieCutter from 'cookie-cutter'
 import { LOCAL_STORAGE_REGISTRATION_PROMOCODE, LOCAL_STORAGE_TOKEN_REFRESH_TIME, LOCAL_STORAGE_USER_ROLE, LOCAL_STORAGE_USER_TOKEN, UserRoles } from '../../constants';
 import { http, setToken } from '../../http';
 import type { AppState, AppThunk } from "../store";
@@ -67,6 +68,9 @@ export const userSlice = createSlice({
       localStorage.setItem(LOCAL_STORAGE_USER_TOKEN, token);
       localStorage.setItem(LOCAL_STORAGE_USER_ROLE, role);
       localStorage.setItem(LOCAL_STORAGE_TOKEN_REFRESH_TIME, moment().toISOString());
+
+      cookieCutter.set('shared_user_token', token, { expires: moment().add(1, 'month').toDate() });
+
     },
     fetchUserSuccess: (state, { payload }: PayloadAction<UserResponse>) => {
       state.loading = false;
