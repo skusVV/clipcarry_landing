@@ -2,65 +2,49 @@ import type { NextPage } from "next";
 import Layout from "../../components/Layout/Layout";
 import Wrapper from "../../components/Layout/Wrapper/Wrapper";
 import styles from "./Payment.module.scss";
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux.hooks";
-import CheckoutForm from "../../components/CheckoutForm/CheckoutForm";
-import { createPaymentIntent, selectSecret } from "../../redux/stripe/stripeSlice";
 import { selectUser } from "../../redux/user/userSlice";
 import { useRouter } from "next/router";
-import { STRIPE_PUBLIC_KEY, UserRoles, EXTENSION_LINK } from "../../constants";
-import { useDidUpdateEffect } from "../../hooks/custom.hooks";
+import { UserRoles, EXTENSION_LINK } from "../../constants";
 import React, { useEffect, useState } from "react";
 import moment from "moment";
-import { isEmpty } from "lodash";
 import Link from "next/link";
-
-const stripePromise = loadStripe(STRIPE_PUBLIC_KEY);
-
+import { createPaymentLink, selectStripeLoading } from "../../redux/stripe/stripeSlice";
+import { useDidUpdateEffect } from "../../hooks/custom.hooks";
+import { ClipLoader } from "react-spinners";
 
 const PaymentPage: NextPage = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
-  const clientSecret = useAppSelector(selectSecret);
+  const stripeLoading = useAppSelector(selectStripeLoading);
   const [paidAccount, setPaidAccount] = useState(false);
 
-  // some kind of hack, nevermind
   useDidUpdateEffect(() => {
-    if (!user?.token || user?.role === UserRoles.GUEST) {
-      router.push('/login');
-    } else {
-      if (user.role === UserRoles.PAID_USER && user.paymentExpirationDate) {
-        setPaidAccount(true);
+    if (!user.loading) {
+      if (!user?.token || user?.role === UserRoles.GUEST) {
+        router.push('/login');
       } else {
-        dispatch(createPaymentIntent());
+        dispatch(createPaymentLink({
+          resolve: (redirectUrl) => {
+            router.push(redirectUrl);
+          },
+          reject: () => {
+            setPaidAccount(true);
+          }
+        }));
       }
     }
-
-  }, [user?.role, user?.token]);
+  }, [user]);
 
   useEffect(() => {
-    if (!isEmpty(user)) {
-      if (user.role === UserRoles.PAID_USER && user.paymentExpirationDate) {
-        setPaidAccount(true);
-      } else {
-        dispatch(createPaymentIntent());
-      }
-    }
-  }, [user?.role, user?.token]);
-
-  const appearance = {
-    theme: 'stripe'
-  };
-  const options: any = {
-    clientSecret,
-    appearance,
-  };
+    setLoading((user && user.loading) || stripeLoading);
+  }, [user.loading, stripeLoading]);
 
   return (
     <Layout>
-      <Wrapper>
+      { !loading && <Wrapper>
         <div className={styles.payment}>
           <div className={styles.payment__left}>
             <div className={styles.payment__title}>Upgrade to Premium</div>
@@ -80,21 +64,18 @@ const PaymentPage: NextPage = () => {
             </div>
           </div>
           <div className={styles.payment__right}>
-            { paidAccount ? (
+            { paidAccount && (
               <div className={styles.payment__message}>
                 <div>You already subscribed until: {moment(user.paymentExpirationDate).format('MM-DD-YYYY')}</div>
                 <Link href={EXTENSION_LINK}>
                   <a target='_blank'>Download the Chrome extension and log in with your email to start using Clipcarry Premium</a>
                 </Link>
               </div>
-            ) : clientSecret && (
-              <Elements options={options} stripe={stripePromise}>
-                <CheckoutForm />
-              </Elements>
             )}
           </div>
         </div>
-      </Wrapper>
+      </Wrapper> }
+      { loading && <div><ClipLoader loading={loading}/></div>}
     </Layout>
   )
 }

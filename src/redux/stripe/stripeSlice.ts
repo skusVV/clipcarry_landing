@@ -1,20 +1,22 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { LOCAL_STORAGE_USER_TOKEN } from "../../constants";
+import { LOCAL_STORAGE_USER_TOKEN, UserRoles } from "../../constants";
 import { http, setToken } from "../../http";
 import { AppState, AppThunk } from "../store";
 
 export interface StripeState {
-  clientSecret: string;
+  paymentLink: string;
+  portalLink: string;
   loading: boolean;
   error: string;
 }
 
 export interface StripeResponse {
-  clientSecret: string;
+  url: string;
 }
 
 const initialState: StripeState = {
-  clientSecret: '',
+  paymentLink: '',
+  portalLink: '',
   loading: false,
   error: ''
 }
@@ -27,37 +29,85 @@ export const stripeSlice = createSlice({
       state.loading = true;
       state.error = '';
     },
-    stripeRequestSuccess: (state, { payload: { clientSecret } }: PayloadAction<StripeResponse>) => {
+    stripePaymentLintRequestSuccess: (state, { payload: { url } }: PayloadAction<StripeResponse>) => {
       state.loading = false;
       state.error = '';
-      state.clientSecret = clientSecret
+      state.paymentLink = url
+    },
+    stripePortalLinkRequestSuccess: (state, { payload: { url } }: PayloadAction<StripeResponse>) => {
+      state.loading = false;
+      state.error = '';
+      state.portalLink = url
     },
     stripeRequestFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
       state.error = action.payload;
+    },
+    stripeDisableLoading: (state) => {
+      state.loading = false;
     }
   }
 });
 
 export const {
   startStripeRequest,
-  stripeRequestSuccess,
-  stripeRequestFailure
+  stripePaymentLintRequestSuccess,
+  stripePortalLinkRequestSuccess,
+  stripeRequestFailure,
+  stripeDisableLoading
 } = stripeSlice.actions
 
-export const selectSecret = (state: AppState) => state.stripe.clientSecret;
+export const selectPaymentLink = (state: AppState) => state.stripe.paymentLink;
+export const selectStripeLoading = (state: AppState) => state.stripe.loading;
 
-export const createPaymentIntent = (): AppThunk =>
+export const createPaymentLink = ({ resolve, reject }): AppThunk =>
   async (dispatch, getState) => {
     try {
       const { user } = getState();
       const token = user.token || localStorage.getItem(LOCAL_STORAGE_USER_TOKEN) || '';
-      dispatch(startStripeRequest());
-      const result = await http.post('/create-payment-intent', { price: 900 }, setToken(token));
-      dispatch(stripeRequestSuccess(result.data));
+
+      if (user.role !== UserRoles.PAID_USER) {
+        dispatch(startStripeRequest());
+        const result = await http.get('/create-payment', setToken(token));
+
+        if (result.data.exist) {
+          reject();
+          dispatch(stripeDisableLoading());
+        } else if (result?.data?.paymentLink.url) {
+          dispatch(stripePaymentLintRequestSuccess(result.data.paymentLink));
+          resolve(result.data.paymentLink.url);
+        }
+
+      } else {
+        reject();
+        dispatch(stripeDisableLoading());
+      }
+
     } catch (error) {
       dispatch(stripeRequestFailure(error?.response?.data))
     }
   }
+
+export const getPortalLink = ({ callback }): AppThunk =>
+  async (dispatch, getState) => {
+    try {
+      const { user, stripe: { portalLink } } = getState();
+      if (portalLink) {
+        callback(portalLink);
+      } else {
+        const token = user.token || localStorage.getItem(LOCAL_STORAGE_USER_TOKEN) || '';
+        dispatch(startStripeRequest());
+
+        const result = await http.get('/create-portal', setToken(token));
+
+        if (result?.data?.portal.url) {
+          dispatch(stripePortalLinkRequestSuccess(result.data.portal));
+          callback(result.data.portal.url);
+        }
+      }
+    } catch (error) {
+      dispatch(stripeRequestFailure(error?.response?.data))
+    }
+  };
 
 export default stripeSlice.reducer;
