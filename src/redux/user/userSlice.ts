@@ -13,6 +13,7 @@ export interface UserState {
   token: string;
   role: string;
   paymentExpirationDate: string;
+  customerId: string;
   error: string;
   loading: boolean;
 }
@@ -25,6 +26,7 @@ const initialState: UserState = {
   token: '',
   role: '',
   paymentExpirationDate: '',
+  customerId: '',
   error: '',
   loading: false
 }
@@ -50,6 +52,7 @@ interface UserResponse {
   lastName?: string;
   email?: string;
   paymentExpirationDate?: string;
+  customerId?: string;
 }
 
 export const userSlice = createSlice({
@@ -82,6 +85,7 @@ export const userSlice = createSlice({
       state.role = payload.role;
       state.userGuid = payload.userGuid;
       state.paymentExpirationDate = payload.paymentExpirationDate;
+      state.customerId = payload.customerId;
     },
     userRequestFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
@@ -130,7 +134,7 @@ export const registerUser = (data: RegisterData, callback: () => void): AppThunk
 
 
 export const getUser = (token = ''): AppThunk =>
-  async (dispatch) => {
+async (dispatch) => {
     try {
       if (token) {
         dispatch(startUserRequest());
@@ -156,14 +160,15 @@ export const loginUser = (data: LoginData, callback: () => void): AppThunk =>
     }
 }
 
-export const promoteUser = (token: string): AppThunk =>
-  async (dispatch) => {
-    try {
+export const promoteUser = ({ token, session_id, callback }): AppThunk =>
+async (dispatch) => {
+  try {
       if (token) {
         dispatch(startUserRequest());
-        const response = await http.patch('/user/promote', {}, setToken(token));
+        const response = await http.patch('/user/promote', { session_id }, setToken(token));
 
         dispatch(authUserSuccess(response.data));
+        callback();
       }
     } catch (error) {
       dispatch(userRequestFailure(error?.response?.data));

@@ -1,28 +1,22 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 import { LOCAL_STORAGE_USER_TOKEN } from "../../constants";
-import { useAppDispatch, useAppSelector } from "../../hooks/redux.hooks";
-import { promoteUser, selectLoading } from "../../redux/user/userSlice";
+import { useDidUpdateEffect } from "../../hooks/custom.hooks";
+import { useAppDispatch } from "../../hooks/redux.hooks";
+import { promoteUser } from "../../redux/user/userSlice";
 
 const PaymentSuccessPage: NextPage = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const loading = useAppSelector(selectLoading);
+  const { session_id } = router.query;
 
-  useEffect(() => {
+  useDidUpdateEffect(() => {
     const token = localStorage.getItem(LOCAL_STORAGE_USER_TOKEN);
 
-    if (token) {
-      dispatch(promoteUser(token));
+    if (token && session_id) {
+      dispatch(promoteUser({ token, session_id, callback: () => { router.push('/payment'); } }));
     }
-  }, []);
-
-  useEffect(() => {
-    if (!loading) {
-      router.push('/payment');
-    }
-  }, [loading]);
+  }, [session_id]);
 
   return (
     <></>

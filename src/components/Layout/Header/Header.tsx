@@ -6,12 +6,14 @@ import styles from "./Header.module.scss";
 import logo from "../../../../public/logo.png";
 import crown from "../../../../public/crown.svg";
 import { useRouter } from "next/router";
-import { useAppSelector } from "../../../hooks/redux.hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks/redux.hooks";
 import { selectUser } from "../../../redux/user/userSlice";
 import { UserRoles } from "../../../constants";
+import { getPortalLink } from "../../../redux/stripe/stripeSlice";
 
 const Header = () => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
 
   const onPremiumClick = () => {
@@ -21,6 +23,16 @@ const Header = () => {
       router.push('/payment');
     }
   };
+
+  const goToPortal = () => {
+    dispatch(getPortalLink({ callback: (redirectUrl) => {
+      router.push(redirectUrl);
+    }}));
+  }
+
+  const showSettingsLink = () => {
+    return user && user.role === UserRoles.PAID_USER && user.customerId;
+  }
 
   return (
     <Wrapper>
@@ -33,10 +45,11 @@ const Header = () => {
           </Link>
         </div>
         <nav className={styles.header__nav}>
+          { showSettingsLink() && <a onClick={goToPortal} className={styles.header__nav__item}>Setting</a> }
           {/* <Link href="#">
             <a className={styles.header__nav__item}>Setting</a>
-          </Link>
-          <Link href="#">
+            </Link> */}
+          {/* <Link href="/tutorial">
             <a className={styles.header__nav__item}>Tutorial</a>
           </Link> */}
           <Link href="/#pricing-section">
