@@ -1,0 +1,49 @@
+@import '../../../../styles/variables.scss';
+
+.checkEmail {
+  width: 530px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__title {
+    color: $primary_black;
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 36px;
+  }
+
+  &__subtitle {
+    color: $dark_grey_secondary;
+    font-size: 16px;
+    font-weight: 400;
+    text-align: center;
+    line-height: 24px;
+    margin: 32px 0;
+
+    b {
+      font-weight: 600;
+      color: $primary_black;
+    }
+  }
+
+  &__resend {
+    width: 416px;
+    padding: 12px;
+    background-color: $primary_white;
+    border: 1px solid $primary_grey;
+    border-radius: 6px;
+    text-align: center;
+    color: $primary_black;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 600;
+
+    &:hover {
+      cursor: pointer;
+      border-color: $primary_black;
+    }
+  }
+
+}

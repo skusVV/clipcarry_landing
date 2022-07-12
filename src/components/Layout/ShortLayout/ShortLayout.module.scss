@@ -1,0 +1,52 @@
+@import "../../../styles/variables.scss";
+
+.wrapper {
+  background-color: $primary_yellow;
+}
+
+.shortLayout {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    padding: 18px 80px;
+    align-items: center;
+
+    &__button {
+      display: flex;
+      align-items: center;
+      height: 48px;
+      padding: 0 16px;
+      background-color: $primary_black;
+      border-radius: 8px;
+      cursor: pointer;
+
+      &__text {
+        color: $primary_white;
+        font-family: $app_font;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      &__arrow {
+        height: 16px;
+        margin-left: 8px;
+      }
+    }
+  }
+
+  &__main {
+    height: calc(100vh - 84px - 96px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__footer {
+    color: $dark_grey_secondary;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    padding: 36px 0;
+  }
+}

@@ -4,11 +4,12 @@ import styles from "./FullButton.module.scss";
 interface FullButtonProps {
   text: string;
   type?: "button" | "submit" | "reset";
+  disabled?: boolean;
   onClick?: () => void;
 }
 
-const FullButton = ({ text, type = 'button', onClick = () => {} }: FullButtonProps) => (
-  <button onClick={onClick} type={type} className={styles.fullButton}>
+const FullButton = ({ disabled, text, type = 'button', onClick = () => {} }: FullButtonProps) => (
+  <button disabled={disabled} onClick={onClick} type={type} className={styles.fullButton}>
     {text}
   </button>
 );

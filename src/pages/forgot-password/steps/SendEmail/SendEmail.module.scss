@@ -1,0 +1,47 @@
+@import '../../../../styles/variables.scss';
+
+.sendEmail {
+  width: 416px;
+
+  &__title {
+    color: $primary_black;
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 34px;
+    margin-bottom: 40px;
+  }
+
+  &__subtitle {
+    color: $primary_black;
+    font-size: 16px;
+    font-weight: 400;
+    text-align: center;
+    line-height: 24px;
+    margin-bottom: 24px;
+  }
+
+  &__form {
+    &__row {
+      margin-bottom: 24px;
+    }
+
+    &__button {
+      margin-bottom: 24px;
+    }
+  }
+
+  &__signIn {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+
+    &__button {
+      font-weight: 600;
+      text-decoration: underline;
+      cursor: pointer;
+      margin-left: 8px;
+    }
+  }
+}

@@ -36,6 +36,10 @@ const LoginForm = () => {
     }));
   }
 
+  const onForgotPasswordClick = () => {
+    router.push('/forgot-password');
+  };
+
   useEffect(() => {
     setError('email', { message: error });
     setError('password', { message: error });
@@ -50,7 +54,7 @@ const LoginForm = () => {
         </div>
         <div className={styles.login__form__row}>
           <Input type="password" placeholder="Enter your password" showEye label="Password" name={'password'} control={control} errors={errors}/>
-          {/* <div className={styles.login__form__row__action}>Forgot password?</div>  disabled for now, will be implemented later*/}
+          <div onClick={onForgotPasswordClick} className={styles.login__form__row__action}>Forgot password?</div>
         </div>
         <div className={styles.login__form__button}>
           <FullButton text="Sign In" type="submit"/>

@@ -90,6 +90,14 @@ export const userSlice = createSlice({
     userRequestFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
       state.error = action.payload;
+    },
+    sendResetPasswordSuccess: (state, action: PayloadAction<string>) => {
+      state.email = action.payload;
+      state.loading = false;
+      state.error = '';
+    },
+    disableLoading: (state) => {
+      state.loading = false;
     }
   }
 })
@@ -98,14 +106,17 @@ export const {
   startUserRequest,
   authUserSuccess,
   userRequestFailure,
-  fetchUserSuccess
+  fetchUserSuccess,
+  sendResetPasswordSuccess,
+  disableLoading
 } = userSlice.actions
 
 export const selectError = (state: AppState) => state.user.error;
 export const selectToken = (state: AppState) => state.user.token;
 export const selectRole = (state: AppState) => state.user.role;
 export const selectUser = (state: AppState) => state.user;
-export const selectLoading = (state: AppState) => state.user.loading;
+export const selectUserEmail = (state: AppState) => state.user.email;
+export const selectUserLoading = (state: AppState) => state.user.loading;
 
 export const registerUser = (data: RegisterData, callback: () => void): AppThunk =>
   async (dispatch, getState) => {
@@ -182,6 +193,41 @@ export const refreshUserToken = (token: string): AppThunk =>
         dispatch(startUserRequest());
         const response = await http.post('/refresh-token', {}, setToken(token));
         dispatch(authUserSuccess(response.data));
+      }
+    } catch (error) {
+      dispatch(userRequestFailure(error?.response?.data));
+    }
+  }
+
+export const sendResetPasswordEmail = ({ email, callback }): AppThunk =>
+  async (dispatch) => {
+    try {
+      dispatch(startUserRequest());
+
+      const response = await http.post('/reset-password', { email });
+
+      if (response.status === 200) {
+        dispatch(sendResetPasswordSuccess(email));
+        callback();
+      }
+
+    } catch (error) {
+      dispatch(userRequestFailure(error?.response?.data));
+    }
+  }
+
+export const resetUserPassword = ({ resetPasswordKey, password, callback }): AppThunk =>
+  async (dispatch) => {
+    try {
+      if (resetPasswordKey && password) {
+        dispatch(startUserRequest());
+
+        const response = await http.patch(`/password/${resetPasswordKey}`, { password });
+
+        if (response.status === 200) {
+          dispatch(disableLoading());
+          callback();
+        }
       }
     } catch (error) {
       dispatch(userRequestFailure(error?.response?.data));
