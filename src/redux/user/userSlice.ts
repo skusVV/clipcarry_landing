@@ -98,6 +98,9 @@ export const userSlice = createSlice({
     },
     disableLoading: (state) => {
       state.loading = false;
+    },
+    clearErrors: (state) => {
+      state.error = '';
     }
   }
 })
@@ -108,7 +111,8 @@ export const {
   userRequestFailure,
   fetchUserSuccess,
   sendResetPasswordSuccess,
-  disableLoading
+  disableLoading,
+  clearErrors
 } = userSlice.actions
 
 export const selectError = (state: AppState) => state.user.error;
@@ -234,4 +238,25 @@ export const resetUserPassword = ({ resetPasswordKey, password, callback }): App
     }
   }
 
+export const changeUserPassword = ({ oldPassword, newPassword, callback }): AppThunk =>
+  async (dispatch, getState) => {
+    try {
+      const { user: { token } } = getState();
+      if (token && oldPassword && newPassword) {
+        dispatch(startUserRequest());
+
+        const response = await http.patch('/user/password', {
+          old_password: oldPassword,
+          new_password: newPassword
+        }, setToken(token));
+
+        if (response.status === 200) {
+          dispatch(disableLoading());
+          callback();
+        }
+      }
+    } catch (error) {
+      dispatch(userRequestFailure(error?.response?.data));
+    }
+  }
 export default userSlice.reducer

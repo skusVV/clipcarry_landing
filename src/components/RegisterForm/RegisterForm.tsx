@@ -7,9 +7,8 @@ import styles from "./RegisterForm.module.scss";
 import FullButton from "../FullButton/FullButton";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux.hooks";
-import { registerUser, selectError } from "../../redux/user/userSlice";
+import { clearErrors, registerUser, selectError } from "../../redux/user/userSlice";
 import { useRouter } from "next/router";
-import {showMessagePopup} from "../../redux/message/message";
 
 
 type Inputs = {
@@ -48,10 +47,15 @@ const RegisterForm = () => {
     setError('email', { message: error });
   }, [error]);
 
+  useEffect(() => {
+    return () => {
+      dispatch(clearErrors());
+    }
+  }, []);
+
   const onRegisterSubmit = (data) => {
     dispatch(registerUser(data, () => {
-      router.push('/payment');
-      // dispatch(showMessagePopup({ message: 'You have been successfully registered and logged in.' }));
+      router.push('/');
     }));
   }
 

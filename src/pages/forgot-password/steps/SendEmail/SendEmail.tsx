@@ -6,7 +6,7 @@ import styles from './SendEmail.module.scss';
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAppDispatch, useAppSelector } from '../../../../hooks/redux.hooks';
-import { selectError, sendResetPasswordEmail } from '../../../../redux/user/userSlice';
+import { clearErrors, selectError, sendResetPasswordEmail } from '../../../../redux/user/userSlice';
 import { useForm } from 'react-hook-form';
 import { ForgotPasswordSteps } from '../../ForgotPassword';
 
@@ -43,6 +43,12 @@ const SendEmailStep = ({ onStepChange }: SendEmailStepProps) => {
   useEffect(() => {
     setError('email', { message: error });
   }, [error]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearErrors());
+    }
+  }, []);
 
   return (
     <div className={styles.sendEmail}>

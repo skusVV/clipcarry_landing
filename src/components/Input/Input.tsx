@@ -10,15 +10,16 @@ interface InputProps {
   label: string;
   placeholder: string;
   name: string;
-  control: Control<any, any>;
+  control?: Control<any, any>;
   required?: boolean;
   showEye?: boolean;
+  disabled?: boolean;
   errors?: {
     [keys: string]: FieldError;
   };
 }
 
-const Input = ({ label, type, name, required, placeholder, errors, control: { register }, showEye = false}: InputProps) => {
+const Input = ({ label, type, name, required, placeholder, disabled, errors, control: { register }, showEye = false}: InputProps) => {
 
   const [ inputType, setInputType ] = useState(type);
 
@@ -54,6 +55,7 @@ const Input = ({ label, type, name, required, placeholder, errors, control: { re
                 ${type === PASSWORD ? styles.input__field__eye : ''}
              `}
              placeholder={placeholder}
+             disabled={disabled}
              type={inputType}
              name={name}
              {...register(name)}/>

@@ -14,7 +14,7 @@ const PaymentSuccessPage: NextPage = () => {
     const token = localStorage.getItem(LOCAL_STORAGE_USER_TOKEN);
 
     if (token && session_id) {
-      dispatch(promoteUser({ token, session_id, callback: () => { router.push('/payment'); } }));
+      dispatch(promoteUser({ token, session_id, callback: () => { router.push('/settings'); } }));
     }
   }, [session_id]);
 

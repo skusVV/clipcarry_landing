@@ -1,20 +1,35 @@
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { EXTENSION_LINK, UserRoles } from '../../constants';
-import { useAppSelector } from '../../hooks/redux.hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux.hooks';
+import { createPaymentLink } from '../../redux/stripe/stripeSlice';
 import { selectUser } from '../../redux/user/userSlice';
 import Wrapper from '../Layout/Wrapper/Wrapper';
 import styles from './Pricing.module.scss';
 
 const Pricing = () => {
   const router = useRouter();
+  const myRef = useRef(null);
+  const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
+  const { asPath } = router;
+
+  useEffect(() => {
+    if (asPath === '/#pricing-section') {
+      executeScroll();
+    }
+  });
 
   const onSubscribeClick = () => {
     if (!user.token || user.role === UserRoles.GUEST) {
       router.push('/login');
     } else if (user.token && user.role === UserRoles.USER) {
-      router.push('/payment');
+      dispatch(createPaymentLink({
+        resolve: (redirectUrl) => {
+          router.push(redirectUrl);
+        },
+        reject: () => {}
+      }));
     }
   };
 
@@ -26,9 +41,11 @@ const Pricing = () => {
     }
   };
 
+  const executeScroll = () => myRef.current.scrollIntoView();
+
   return (
     <Wrapper className={styles.wrapper}>
-      <section id="pricing-section" className={styles.pricing}>
+      <section ref={myRef} className={styles.pricing}>
         <div className={styles.pricing__header}>
           <div className={styles.pricing__header__title}>
             Start now your free plan

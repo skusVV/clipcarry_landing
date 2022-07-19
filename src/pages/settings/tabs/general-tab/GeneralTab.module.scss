@@ -1,0 +1,23 @@
+@import '../../../../styles/variables.scss';
+
+.general {
+  padding: 0 40px;
+  font-family: $app_font;
+  width: 100%;
+
+  &__title {
+    color: $primary_black;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 30px;
+    padding-bottom: 20px;
+  }
+
+  &__form {
+
+    &__row {
+      margin-top: 30px;
+    }
+
+  }
+}

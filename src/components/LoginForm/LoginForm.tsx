@@ -6,7 +6,7 @@ import Input from "../Input/Input";
 import styles from "./LoginForm.module.scss";
 import FullButton from "../FullButton/FullButton";
 import Link from "next/link";
-import { loginUser, selectError } from "../../redux/user/userSlice";
+import { clearErrors, loginUser, selectError } from "../../redux/user/userSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux.hooks";
 import { useRouter } from "next/router";
 
@@ -44,6 +44,12 @@ const LoginForm = () => {
     setError('email', { message: error });
     setError('password', { message: error });
   }, [error]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearErrors());
+    }
+  }, []);
 
   return (
     <div className={styles.login}>

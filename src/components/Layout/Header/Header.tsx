@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux.hooks";
 import { selectUser } from "../../../redux/user/userSlice";
 import { UserRoles } from "../../../constants";
-import { getPortalLink } from "../../../redux/stripe/stripeSlice";
+import { createPaymentLink } from "../../../redux/stripe/stripeSlice";
 
 const Header = () => {
   const router = useRouter();
@@ -20,18 +20,17 @@ const Header = () => {
     if (!user.token || user.role === UserRoles.GUEST) {
       router.push('/login');
     } else if (user.token && user.role === UserRoles.USER) {
-      router.push('/payment');
+      dispatch(createPaymentLink({
+        resolve: (redirectUrl) => {
+          router.push(redirectUrl);
+        },
+        reject: () => {}
+      }));
     }
   };
 
-  const goToPortal = () => {
-    dispatch(getPortalLink({ callback: (redirectUrl) => {
-      router.push(redirectUrl);
-    }}));
-  }
-
   const showSettingsLink = () => {
-    return user && user.role === UserRoles.PAID_USER && user.customerId;
+    return user && user.token && user.role !== UserRoles.GUEST;
   }
 
   return (
@@ -45,13 +44,9 @@ const Header = () => {
           </Link>
         </div>
         <nav className={styles.header__nav}>
-          { showSettingsLink() && <a onClick={goToPortal} className={styles.header__nav__item}>Setting</a> }
-          {/* <Link href="#">
-            <a className={styles.header__nav__item}>Setting</a>
-            </Link> */}
-          {/* <Link href="/tutorial">
-            <a className={styles.header__nav__item}>Tutorial</a>
-          </Link> */}
+          { showSettingsLink() && <Link href="/settings">
+            <a className={styles.header__nav__item}>Settings</a>
+            </Link>}
           <Link href="/#pricing-section">
             <a className={styles.header__nav__item}>Pricing</a>
           </Link>
