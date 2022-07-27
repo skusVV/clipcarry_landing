@@ -16,6 +16,8 @@ export interface UserState {
   customerId: string;
   error: string;
   loading: boolean;
+  isLoaded: boolean;
+  isInvitedUser: boolean;
 }
 
 const initialState: UserState = {
@@ -28,7 +30,9 @@ const initialState: UserState = {
   paymentExpirationDate: '',
   customerId: '',
   error: '',
-  loading: false
+  loading: false,
+  isLoaded: false,
+  isInvitedUser: false
 }
 
 export interface RegisterData {
@@ -53,6 +57,7 @@ interface UserResponse {
   email?: string;
   paymentExpirationDate?: string;
   customerId?: string;
+  isInvitedUser?: boolean;
 }
 
 export const userSlice = createSlice({
@@ -86,6 +91,8 @@ export const userSlice = createSlice({
       state.userGuid = payload.userGuid;
       state.paymentExpirationDate = payload.paymentExpirationDate;
       state.customerId = payload.customerId;
+      state.isInvitedUser = payload.isInvitedUser;
+      state.isLoaded = true;
     },
     userRequestFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
@@ -101,7 +108,10 @@ export const userSlice = createSlice({
     },
     clearErrors: (state) => {
       state.error = '';
-    }
+    },
+    setIsLoadedState: (state) => {
+      state.isLoaded = true
+    },
   }
 })
 
@@ -112,7 +122,8 @@ export const {
   fetchUserSuccess,
   sendResetPasswordSuccess,
   disableLoading,
-  clearErrors
+  clearErrors,
+  setIsLoadedState
 } = userSlice.actions
 
 export const selectError = (state: AppState) => state.user.error;

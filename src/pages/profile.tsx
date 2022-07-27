@@ -2,7 +2,7 @@ import moment from 'moment';
 import React, { useEffect } from 'react';
 import { LOCAL_STORAGE_TOKEN_REFRESH_TIME, LOCAL_STORAGE_USER_TOKEN } from '../constants';
 import { useAppDispatch } from '../hooks/redux.hooks';
-import { getUser, refreshUserToken } from '../redux/user/userSlice';
+import { getUser, refreshUserToken, setIsLoadedState } from '../redux/user/userSlice';
 
 export default function ProfileProvider({ children }) {
   const dispatch = useAppDispatch();
@@ -23,6 +23,8 @@ export default function ProfileProvider({ children }) {
     const storageToken = localStorage.getItem(LOCAL_STORAGE_USER_TOKEN);
     if (storageToken) {
       dispatch(getUser(storageToken));
+    } else {
+      dispatch(setIsLoadedState());
     }
   });
 

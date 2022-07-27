@@ -32,6 +32,12 @@ const SettingsPage: NextPage = () => {
     setLoading((user && user.loading) || stripeLoading);
   }, [user.loading, stripeLoading]);
 
+  useEffect(() => {
+    if (user.isLoaded && !user.loading && !user.token) {
+        router.push('/');
+    }
+  }, [user]);
+
   const getUserAvatar = () => {
     return (<div className={styles.settings__user__avatar__placeholder}>{getUserFirstLetter()}</div>) // or rear user image
   };
@@ -60,11 +66,16 @@ const SettingsPage: NextPage = () => {
   };
 
   const getNavOptions = () => {
-    return [
+    const options = [
       { title: 'General', key: SettingTabs.GENERAL, onClick: () => { setActiveTab(SettingTabs.GENERAL) } },
       { title: 'Password', key: SettingTabs.PASSWORD, onClick: () => { setActiveTab(SettingTabs.PASSWORD) } },
-      { title: 'Billing', key: SettingTabs.BILLING, onClick: onBillingClick },
     ];
+
+    if (!user.isInvitedUser) {
+      options.push({ title: 'Billing', key: SettingTabs.BILLING, onClick: onBillingClick });
+    }
+
+    return options;
   };
 
   const renderNavigation = (options) => {

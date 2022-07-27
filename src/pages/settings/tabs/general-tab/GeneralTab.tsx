@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Input from '../../../../components/Input/Input';
 import { UserState } from '../../../../redux/user/userSlice';
 import styles from './GeneralTab.module.scss';
@@ -17,13 +17,19 @@ type Inputs = {
 };
 
 const GeneralTab = ({ user }: GeneralTabProps) => {
-  const { control, formState: { errors } } = useForm<Inputs>({
+  const { control, formState: { errors }, setValue } = useForm<Inputs>({
     defaultValues: {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email
     }
   });
+
+  useEffect(() => {
+    setValue('firstName', user.firstName);
+    setValue('lastName', user.lastName);
+    setValue('email', user.email);
+  }, [user]);
 
   return (
     <div className={styles.general}>
