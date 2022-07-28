@@ -19,9 +19,9 @@ type Inputs = {
 const GeneralTab = ({ user }: GeneralTabProps) => {
   const { control, formState: { errors }, setValue } = useForm<Inputs>({
     defaultValues: {
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email
+      firstName: user && user.firstName ? user.firstName : '',
+      lastName: user && user.lastName ? user.lastName : '',
+      email: user && user.email ? user.email : '',
     }
   });
 
@@ -44,7 +44,7 @@ const GeneralTab = ({ user }: GeneralTabProps) => {
         <div className={styles.general__form__row}>
           <Input type='text' control={control} errors={errors} name='email' label='Email' placeholder='Enter Email' disabled={true}></Input>
         </div>
-        {user.paymentExpirationDate && <div className={styles.general__form__row}>
+        {user && user.paymentExpirationDate && <div className={styles.general__form__row}>
           <div>You subscribed until: {moment(user.paymentExpirationDate).format('MM-DD-YYYY')}</div>
         </div>}
       </form>
