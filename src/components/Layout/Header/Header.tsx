@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import Wrapper from "../Wrapper/Wrapper";
 import styles from "./Header.module.scss";
 import logo from "../../../../public/logo.png";
@@ -15,6 +15,7 @@ const Header = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
+  const { redirectTo } = router.query;
 
   const onPremiumClick = () => {
     if (!user.token || user.role === UserRoles.GUEST) {
@@ -28,6 +29,12 @@ const Header = () => {
       }));
     }
   };
+
+  useEffect(() => {
+    if (redirectTo && redirectTo === 'payment') {
+      onPremiumClick();
+    }
+  }, [redirectTo]);
 
   const showSettingsLink = () => {
     return user && user.token && user.role !== UserRoles.GUEST;
